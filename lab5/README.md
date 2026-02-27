@@ -16,7 +16,7 @@ docker exec -it node-worker
 
 # Нужно доставить образы на оба узла, чтобы Swarm мог их запускать везде.
 # Копируем конфиги в менеджер
-# docker cp . node-manager:/app
+docker cp . node-manager:/app
 # Сохраняем образы в архив и перекидываем на воркер
 docker save my-gateway my-service-5 my-service-6 -o images.tar
 docker cp images.tar node-worker:/images.tar
