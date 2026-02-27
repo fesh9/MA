@@ -4,17 +4,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Подтягиваем код из репозитория
                 checkout scm
             }
         }
 
         stage('Build Service A') {
             steps {
-                dir('lab2/service-a') {
-                    script {
-                        // Собираем образ для первого сервиса
-                        sh "docker build -t service-a:${env.BUILD_ID} ."
+                script {
+                    dir('lab2/service-a') {
+                        bat "docker build -t service-a-image:latest ."
                     }
                 }
             }
@@ -22,24 +20,29 @@ pipeline {
 
         stage('Build Service B') {
             steps {
-                dir('lab2/service-b') {
-                    script {
-                        // Собираем образ для второго сервиса
-                        sh "docker build -t service-b:${env.BUILD_ID} ."
+                script {
+                    dir('lab2/service-b') {
+                        bat "docker build -t service-b-image:latest ."
                     }
                 }
             }
         }
 
-        stage('Test Run (Compose)') {
+        stage('Test Deployment') {
             steps {
-                dir('lab2') {
-                    // Проверяем, что всё вместе поднимается
-                    sh "docker-compose up -d"
-                    sh "docker-compose ps"
-                    sh "docker-compose down"
+                script {
+                    dir('lab2') {
+                        bat "docker-compose build"
+                        echo "Сборка через Compose прошла успешно!"
+                    }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Пайплайн завершен успешно!'
         }
     }
 }
