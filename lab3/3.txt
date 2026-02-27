@@ -1,0 +1,8 @@
+RabbitMQ cd rabbitmq
+docker-compose up -d --build 
+cd ../service_a
+docker-compose up -d --build
+cd ../service_b
+docker-compose up -d --build
+
+docker logs -f service_b

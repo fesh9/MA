@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: my-gateway:latest
+    ports:
+      - "80:80"
+    networks:
+      - lab5-net
+
+  service_5:
+    image: my-service-5:latest
+    networks:
+      - lab5-net
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+  service_6:
+    image: my-service-6:latest
+    networks:
+      - lab5-net
+    deploy:
+      replicas: 3
+
+networks:
+  lab5-net:
+    driver: overlay
